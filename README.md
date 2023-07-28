@@ -1,4 +1,4 @@
 # web project 
 |  #  | Project                                                                                                                     | Live Demo                                                                         |
 | :-: | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| 01  | [shop_menu]()                             | [Live Demo](https://akash2king.github.io/Web-projects/)               |
+| 01  | [shop_menu](https://github.com/Akash2king/Web-projects/blob/main/index.html)                             | [Live Demo](https://akash2king.github.io/Web-projects/)               |
