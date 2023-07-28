@@ -1,5 +1,5 @@
-# web project
-- this is the repository for web projects you can access all the web projects I have done in this repository
+# web project 
+this is the repository for web projects you can access all the web projects I have done in this repository
 
 |  #  | Project                                                                                                                     | Live Demo                                                                         |
 | :-: | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
