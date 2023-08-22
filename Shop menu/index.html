@@ -56,7 +56,12 @@
         }
 
         .product h3 {
-            color: #ff0000;
+            color: #fff;
+            background-color:green;
+           
+           padding:4px;
+           text-align:center;
+           border-radius:4px;
         }
 
         .cart-item {
@@ -101,7 +106,7 @@
   border-radius: 12px;
   border: none;
   background-color: rgb(255, 208, 0);
-  display: flex;
+  display:flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -163,7 +168,7 @@
 }
 
 .search input[type="text"] {
-  width: 200px;
+  width: 320px;
   padding: 10px;
   border: none;
   border-radius: 20px;
@@ -189,7 +194,23 @@
   color: rgb(255, 255, 255);
   background-color: blue;
 }
+.cart-menu > button{
+    background-color: rgb(255, 208, 0);
+  border: none;
+  color: black;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
+}
+.cart-menu:active {
+  transform: scale(0.95);
+  transition-duration: .5s;
+}/* ... */.search {
+  display: inline-block;
+  position: relative;
+}
     </style>
 </head>
 
@@ -216,15 +237,17 @@
     <script>
         // Your existing JavaScript code
         // ...
-const products = [
-            { id: 1, name: "Organic Apples", price: 2.99, nutrition: "Vitamin C, Fiber", benefits: "Boosts Immunity" },
-            { id: 2, name: "Organic Spinach", price: 3.49, nutrition: "Vitamin A, Iron", benefits: "Improves Vision" },
-            { id: 3, name: "Organic Bananas", price: 1.99, nutrition: "Potassium, Vitamin B6", benefits: "Good for Heart Health" },
-            { id: 4, name: "Organic Avocado", price: 2.79, nutrition: "Healthy Fats, Fiber", benefits: "Promotes Skin Health" },
-            { id: 5, name: "Organic Quinoa", price: 4.99, nutrition: "Protein, Fiber", benefits: "Gluten-Free Superfood" },
-            // Add more products here
-        ];
+let products;
 
+// Load product data from JSON file using Fetch API
+fetch("products.json")
+  .then(response => response.json())
+  .then(data => {
+    products = data;
+    // Call the function to show the product catalogue
+  })
+  .catch(error => console.error("Error loading product data:", error));
+  
         let cart = [];
 
         function showCatalogue() {
@@ -232,7 +255,7 @@ const products = [
                 <div class="product">
                     <h3>${product.name}</h3>
                     <p>Price: $${product.price.toFixed(2)}</p>
-                    <p>Nutritional Values: ${product.nutrition}</p>
+                    <p>Weight: ${product.weight}</p>
                     <p>Benefits: ${product.benefits}</p>
                       <button onclick="addToCart(${product.id})" class="CartBtn">
   <span class="IconContainer"> 
@@ -252,6 +275,7 @@ const products = [
                 <div class="cart-item">
                     <h3>${item.name}</h3>
                     <p>Price: $${item.price.toFixed(2)}</p>
+                    <p>Weight: $${item.weight}</p>
                 </div>
             `).join('');
 
@@ -261,33 +285,14 @@ const products = [
                 <h2>Cart</h2>
                 ${cartHTML}
                 <h3>Total: $${total.toFixed(2)}</h3>
+                <div class="cart-menu">
   <button onclick="downloadDataAsExcel()">Download cart</button>
                 <button onclick="makePayment()">Make Payment</button>
-   <button onclick="clearcart()">clear cart</button>
+   <button onclick="clearcart()">clear cart</button></div>
             `;
         }
-/*
-        function showFeedback() {
-            document.getElementById("content").innerHTML = `
-                 <h1>Feedback Panel</h1>
-    <form id="feedbackForm">
-        <label for="feedback">Enter your feedback:</label>
-        <textarea id="feedback" rows="6" cols="40" required></textarea>
-        <br>
-          <div id="ratingPanel">
-            <label for="rating">Rating:</label>
-            <div id="stars">
-                <span onclick="rate(1)">★</span>
-                <span onclick="rate(2)">★</span>
-                <span onclick="rate(3)">★</span>
-                <span onclick="rate(4)">★</span>
-                <span onclick="rate(5)">★</span>
-            </div>
-        </div>
-        <input type="submit" value="Submit">
-    </form>
-            `;
-        }*/
+
+
 
         function addToCart(productId) {
             const product = products.find(p => p.id === productId);
@@ -310,29 +315,7 @@ const products = [
             showCatalogue();
         }
 
-       /* function sendFeedbackEmail() {
-            // Get user input
-            const feedbackText = document.getElementById("feedback").value;
 
-            // Email recipient address (replace with your desired email address)
-            const recipientEmail = "recipient@example.com";
-
-            // Redirect to mail page with pre-filled email
-            window.location.href = `mailto:${recipientEmail}?subject=Feedback&body=${encodeURIComponent(feedbackText)}`;
-event.preventDefault(); 
-        }
-
-      document.getElementById("feedbackForm").onsubmit = function (event) {
-            event.preventDefault(); // Prevent form submission
-            sendFeedbackEmail();
-        };
-function rate(stars) {
-            const allStars = document.querySelectorAll("#stars span");
-            for (let i = 0; i < allStars.length; i++) {
-                allStars[i].style.color = i < stars ? "gold" : "gray";
-            }
-            document.getElementById("rating").value = stars;
-        }*/
         function updateCartCount() {
             document.getElementById("cartCount").textContent = `(${cart.length})`;
         }
@@ -421,6 +404,7 @@ if (cart.length === 0) {
 
             const cartData = cart.map(item => ({
                 "Product Name": item.name,
+                "Weight":item.weight, 
                 "Price": `$${item.price.toFixed(2)}`
             }));
 
@@ -459,13 +443,7 @@ if (cart.length === 0) {
         }
       }
     }
-        function rate(stars) {
-            const allStars = document.querySelectorAll("#stars span");
-            for (let i = 0; i < allStars.length; i++) {
-                allStars[i].style.color = i < stars ? "gold" : "gray";
-            }
-            document.getElementById("rating").value = stars;
-        }
+        
 function searchProducts() {
             const searchInput = document.getElementById("productSearch").value.toLowerCase();
             const filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchInput));
@@ -489,4 +467,4 @@ function searchProducts() {
    
 </body>
 
-</html>
+    </html>
